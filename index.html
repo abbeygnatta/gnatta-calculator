@@ -13,22 +13,21 @@
 
         body {
             font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #F8F5FA;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: transparent;
+            padding: 0;
+            margin: 0;
             color: #333953;
+            overflow-x: hidden;
         }
 
         .calculator-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: none;
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             overflow: hidden;
+            margin: 0;
         }
 
         .header {
@@ -118,7 +117,6 @@
             box-shadow: 0 0 0 3px rgba(151, 70, 183, 0.1);
         }
 
-        /* Slider styles */
         .slider-container {
             margin-top: 10px;
         }
@@ -209,10 +207,6 @@
             margin-top: 15px;
         }
 
-        .ai-pricing-info {
-            display: none;
-        }
-
         .savings-highlight {
             background: #3CAF88;
             color: white;
@@ -234,7 +228,6 @@
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
         }
 
-        /* Info button styles */
         .info-button {
             display: inline-flex;
             align-items: center;
@@ -301,7 +294,6 @@
             font-weight: 400;
         }
 
-        /* Arrow pointing upward to the info button */
         .info-popup::before {
             content: '';
             position: absolute;
@@ -328,14 +320,6 @@
 
         /* Mobile styles */
         @media (max-width: 968px) {
-            body {
-                align-items: flex-start;
-            }
-
-            .calculator-container {
-                max-width: 600px;
-            }
-
             .calculator-body {
                 flex-direction: column;
                 min-height: auto;
@@ -444,8 +428,7 @@
         function calculateAICost(interactions) {
             if (interactions === 0) return { cost: 0, unitCost: 0, tier: null };
             
-            // Find the appropriate tier (smallest tier that can handle the volume)
-            let selectedTier = aiPricingTiers[aiPricingTiers.length - 1]; // Default to largest
+            let selectedTier = aiPricingTiers[aiPricingTiers.length - 1];
             
             for (let tier of aiPricingTiers) {
                 if (interactions <= tier.volume) {
@@ -454,7 +437,6 @@
                 }
             }
             
-            // If interactions exceed largest tier, calculate based on highest tier unit cost
             if (interactions > aiPricingTiers[aiPricingTiers.length - 1].volume) {
                 const highestTier = aiPricingTiers[aiPricingTiers.length - 1];
                 return {
@@ -472,28 +454,23 @@
         }
 
         function calculateSavings() {
-            // Get input values
             const humanAgents = parseInt(document.getElementById('humanAgents').value) || 0;
             const monthlyInteractions = parseInt(document.getElementById('monthlyInteractions').value) || 0;
             const aiReplacementPercent = parseInt(document.getElementById('aiReplacement').value) || 0;
             
-            // Constants
             const humanAgentCostPerMonth = 2400;
             const humanInteractionsPerHour = 13;
             const hoursPerMonth = 160;
             
-            // Calculations
             const currentHumanCost = humanAgents * humanAgentCostPerMonth;
-            const humanInteractionsPerAgentPerMonth = humanInteractionsPerHour * hoursPerMonth; // 2080
+            const humanInteractionsPerAgentPerMonth = humanInteractionsPerHour * hoursPerMonth;
             
             const aiHandledInteractions = Math.round(monthlyInteractions * (aiReplacementPercent / 100));
             const humanHandledInteractions = monthlyInteractions - aiHandledInteractions;
             
-            // Calculate AI cost using tiered pricing
             const aiCostResult = calculateAICost(aiHandledInteractions);
             const aiCost = aiCostResult.cost;
             
-            // Calculate required human agents for remaining work
             const requiredHumanAgents = Math.ceil(humanHandledInteractions / humanInteractionsPerAgentPerMonth);
             const remainingHumanCost = requiredHumanAgents * humanAgentCostPerMonth;
             
@@ -501,16 +478,13 @@
             const monthlySavings = currentHumanCost - totalNewCost;
             const annualSavings = monthlySavings * 12;
             
-            // Update display
             document.getElementById('humanAgentCount').textContent = humanAgents;
             document.getElementById('humanCost').textContent = `£${currentHumanCost.toLocaleString()}`;
             document.getElementById('remainingAgents').textContent = requiredHumanAgents;
-            document.getElementById('aiUnitCostText').textContent = `£${aiCostResult.unitCost.toFixed(2)} per AI interaction`;
             document.getElementById('totalNewCost').textContent = `£${totalNewCost.toLocaleString()}`;
             document.getElementById('monthlySavings').textContent = `£${monthlySavings.toLocaleString()}`;
             document.getElementById('annualSavings').textContent = `£${annualSavings.toLocaleString()}`;
             
-            // Update AI pricing details
             if (aiHandledInteractions > 0) {
                 document.getElementById('aiUnitCostText').textContent = `£${aiCostResult.unitCost.toFixed(2)} per AI interaction`;
             } else {
@@ -518,25 +492,10 @@
             }
         }
         
-        // Slider handling
-        const slider = document.getElementById('aiReplacement');
-        const sliderValue = document.getElementById('sliderValue');
-        
-        slider.addEventListener('input', function() {
-            sliderValue.textContent = this.value;
-            calculateSavings();
-        });
-        
-        // Add event listeners
-        document.getElementById('humanAgents').addEventListener('input', calculateSavings);
-        document.getElementById('monthlyInteractions').addEventListener('input', calculateSavings);
-        
-        // Info popup handling
         function toggleInfo(button) {
             const popup = button.nextElementSibling;
             popup.classList.toggle('show');
             
-            // Close when clicking outside
             document.addEventListener('click', function closePopup(e) {
                 if (!button.contains(e.target) && !popup.contains(e.target)) {
                     popup.classList.remove('show');
@@ -544,9 +503,21 @@
                 }
             });
         }
-        
-        // Initial calculation
-        calculateSavings();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.getElementById('aiReplacement');
+            const sliderValue = document.getElementById('sliderValue');
+            
+            slider.addEventListener('input', function() {
+                sliderValue.textContent = this.value;
+                calculateSavings();
+            });
+            
+            document.getElementById('humanAgents').addEventListener('input', calculateSavings);
+            document.getElementById('monthlyInteractions').addEventListener('input', calculateSavings);
+            
+            calculateSavings();
+        });
     </script>
 </body>
 </html>
