@@ -179,26 +179,6 @@
             box-shadow: 0 2px 8px rgba(151, 70, 183, 0.3);
         }
 
-        .break-even-indicator {
-            background: #FFF3CD;
-            border: 1px solid #FFE4A3;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #856404;
-        }
-
-        .break-even-indicator.positive {
-            background: rgba(60, 175, 136, 0.1);
-            border-color: rgba(60, 175, 136, 0.3);
-            color: #2A6B56;
-        }
-
-        .break-even-indicator strong {
-            font-weight: 600;
-        }
-
         .results-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -236,38 +216,6 @@
             color: #333953;
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
             margin-top: 15px;
-        }
-
-        .pilot-phase {
-            background: #E3F2FD;
-            border: 1px solid #BBDEFB;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .pilot-phase h3 {
-            font-family: 'Museo Slab', Rockwell, Georgia, serif;
-            font-size: 1.1em;
-            color: #1565C0;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .pilot-phase .metric {
-            font-size: 2em;
-            font-weight: 700;
-            color: #1565C0;
-            font-family: 'Museo Slab', Rockwell, Georgia, serif;
-            margin: 10px 0;
-        }
-
-        .pilot-phase .description {
-            font-size: 0.9em;
-            color: #1976D2;
-            margin-top: 10px;
         }
 
         .savings-summary {
@@ -339,6 +287,7 @@
             transform: scale(1.1);
         }
 
+        /* Slider info popup styles - positioned relative to slider container */
         .slider-container .info-popup {
             position: absolute;
             top: 35px;
@@ -368,24 +317,28 @@
             color: #333953;
             font-weight: 600;
             text-align: left;
+            text-transform: none;
         }
 
         .slider-container .info-popup ul {
             font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: #718096;
             padding-left: 20px;
             line-height: 1.5;
             font-weight: 400;
             text-align: left;
+            text-transform: none;
         }
 
         .slider-container .info-popup li {
             margin-bottom: 6px;
             font-weight: 400;
             text-align: left;
+            text-transform: none;
         }
 
+        /* Arrow pointing up to the info button */
         .slider-container .info-popup::before {
             content: '';
             position: absolute;
@@ -412,6 +365,7 @@
             border-bottom: 8px solid white;
         }
 
+        /* Section title info popup styles - keep original positioning */
         .section-title .info-popup {
             position: absolute;
             top: 30px;
@@ -479,6 +433,7 @@
             border-bottom: 8px solid white;
         }
 
+        /* Mobile styles */
         @media (max-width: 600px) {
             .calculator-body {
                 flex-direction: column;
@@ -499,6 +454,7 @@
                 grid-template-columns: 1fr;
             }
 
+            /* Adjust popup positioning for mobile */
             .slider-container .info-popup {
                 width: 250px;
                 left: 50%;
@@ -509,6 +465,17 @@
                 left: -50px;
                 width: 250px;
             }
+        }
+
+        .assumption-text {
+            font-size: 0.85em;
+            color: #718096;
+            font-style: italic;
+            margin-top: 15px;
+            padding: 12px;
+            background: #F8F5FA;
+            border-radius: 6px;
+            border-left: 3px solid #9746B7;
         }
     </style>
 </head>
@@ -532,8 +499,8 @@
                                 <h4>Number of Human Agents</h4>
                                 <ul>
                                     <li>Current full-time equivalent agents in your team</li>
-                                    <li>Includes all customer-facing support staff</li>
-                                    <li>Used to calculate baseline costs and capacity</li>
+                                    <li>Include all customer-facing support staff</li>
+                                    <li>Used to estimate baseline costs and capacity</li>
                                 </ul>
                             </div>
                         </div>
@@ -550,28 +517,58 @@
                                 <h4>Percentage Suitable for AI Automation</h4>
                                 <ul>
                                     <li>Typical range: 40-80% of customer interactions</li>
-                                    <li>Includes routine queries, FAQs, order tracking</li>
-                                    <li>Complex issues still require human agents</li>
-                                    <li>Conservative estimates recommended initially</li>
+                                    <li>Consider query types that are ready for automation, and their relative contact volumes</li>
                                 </ul>
                             </div>
                         </div>
                         <input type="range" id="aiReplacement" value="60" min="0" max="100" step="10">
                     </div>
                 </div>
-
-                <div id="breakEvenIndicator" class="break-even-indicator">
-                    <strong>Break-even point:</strong> You need 20% automation to start seeing cost savings with your current team size.
-                </div>
             </div>
 
-            <div class="results-section" id="resultsSection">
-                <!-- Content will be dynamically populated -->
+            <div class="results-section">
+                <h2 class="section-title">Cost Comparison
+                    <span class="info-button" onclick="toggleInfo(this)">i</span>
+                    <div class="info-popup">
+                        <h4>Calculation Details</h4>
+                        <ul>
+                            <li>Human agents: £2,400/month (all costs included)</li>
+                            <li>Productivity: 13 interactions/hour, 160 hours/month</li>
+                            <li>AI pricing includes volume discounts</li>
+                            <li>AI handles routine queries; complex issues remain with humans</li>
+                        </ul>
+                    </div>
+                </h2>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Current Costs</h3>
+                        <div class="main-line"><span id="humanAgentCount">5</span> human agents</div>
+                        <div class="main-line">£2,400/month each</div>
+                        <div class="value" id="humanCost">£12,000</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>New Costs</h3>
+                        <div class="main-line"><span id="remainingAgents">2</span> human agents</div>
+                        <div class="main-line"><span id="aiUnitCostText">+ AI automation</span></div>
+                        <div class="value" id="totalNewCost">£7,104</div>
+                    </div>
+                </div>
+                
+                <div class="savings-summary">
+                    <div class="savings-line">
+                        <span class="savings-label">Monthly Savings:</span>
+                        <span class="savings-value" id="monthlySavings">£4,896</span>
+                        <span class="annual-note">(£<span id="annualSavings">58,752</span> annually)</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // AI pricing tiers with volume discounts
         const aiPricingTiers = [
             { volume: 500, price: 200, unitCost: 0.40 },
             { volume: 1000, price: 389, unitCost: 0.39 },
@@ -613,116 +610,6 @@
             };
         }
 
-        function calculateBreakEvenPoint(humanAgents) {
-            const humanAgentCostPerMonth = 2400;
-            const humanInteractionsPerAgentPerMonth = 2080;
-            const totalMonthlyInteractions = humanAgents * humanInteractionsPerAgentPerMonth;
-            
-            // Find the minimum automation percentage needed to reduce by one agent
-            const targetInteractionsToReplace = humanInteractionsPerAgentPerMonth;
-            const exactBreakEvenPercent = (targetInteractionsToReplace / totalMonthlyInteractions) * 100;
-            
-            // Round up to nearest 10% since slider only moves in 10% increments
-            const breakEvenPercent = Math.ceil(exactBreakEvenPercent / 10) * 10;
-            
-            return Math.min(breakEvenPercent, 100);
-        }
-
-        function renderPilotPhaseCards(humanAgents, aiHandledInteractions) {
-            return `
-                <div class="results-grid">
-                    <div class="result-card">
-                        <h3>Current Costs</h3>
-                        <div class="main-line">${humanAgents} human agents</div>
-                        <div class="main-line">£2,400/month each</div>
-                        <div class="value">£${(humanAgents * 2400).toLocaleString()}</div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3>Pilot Investment</h3>
-                        <div class="main-line">Same ${humanAgents} agents</div>
-                        <div class="main-line">+ AI automation setup</div>
-                        <div class="value">+£${calculateAICost(aiHandledInteractions).cost}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderPilotPhase(humanAgents, aiReplacementPercent, aiHandledInteractions) {
-            return `
-                <h2 class="section-title">Pilot Phase Metrics</h2>
-                
-                <div class="pilot-phase">
-                    <h3>Building AI Capability</h3>
-                    <div class="metric">${aiHandledInteractions.toLocaleString()}</div>
-                    <div class="description">interactions automated monthly</div>
-                    <div style="margin-top: 15px; font-size: 0.9em; color: #1976D2;">
-                        This builds your AI knowledge base and prepares for scale. 
-                        Increase automation to ${calculateBreakEvenPoint(humanAgents)}%+ to begin reducing costs.
-                    </div>
-                </div>
-                
-                <div class="results-grid">
-                    <div class="result-card">
-                        <h3>Current Costs</h3>
-                        <div class="main-line">${humanAgents} human agents</div>
-                        <div class="main-line">£2,400/month each</div>
-                        <div class="value">£${(humanAgents * 2400).toLocaleString()}</div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3>Pilot Investment</h3>
-                        <div class="main-line">Same ${humanAgents} agents</div>
-                        <div class="main-line">+ AI automation setup</div>
-                        <div class="value">+£${calculateAICost(aiHandledInteractions).cost}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderSavingsPhase(humanAgents, aiReplacementPercent, calculations) {
-            const { currentHumanCost, requiredHumanAgents, aiCost, aiCostResult, totalNewCost, monthlySavings, annualSavings } = calculations;
-            
-            return `
-                <h2 class="section-title">Cost Savings Analysis
-                    <span class="info-button" onclick="toggleInfo(this)">i</span>
-                    <div class="info-popup">
-                        <h4>Calculation Details</h4>
-                        <ul>
-                            <li>Human agents: £2,400/month (all costs included)</li>
-                            <li>Productivity: 13 interactions/hour, 160 hours/month</li>
-                            <li>AI pricing includes volume discounts</li>
-                            <li>AI handles routine queries; complex issues remain with humans</li>
-                        </ul>
-                    </div>
-                </h2>
-                
-                <div class="results-grid">
-                    <div class="result-card">
-                        <h3>Current Costs</h3>
-                        <div class="main-line">${humanAgents} human agents</div>
-                        <div class="main-line">£2,400/month each</div>
-                        <div class="value">£${currentHumanCost.toLocaleString()}</div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3>New Costs</h3>
-                        <div class="main-line">${requiredHumanAgents} human agents</div>
-                        <div class="main-line">£${aiCostResult.unitCost.toFixed(2)} per AI interaction</div>
-                        <div class="value">£${totalNewCost.toLocaleString()}</div>
-                    </div>
-                </div>
-                
-                <div class="savings-summary">
-                    <div class="savings-line">
-                        <span class="savings-label">Monthly Savings:</span>
-                        <span class="savings-value">£${monthlySavings.toLocaleString()}</span>
-                        <span class="annual-note">(£${annualSavings.toLocaleString()} annually)</span>
-                    </div>
-                </div>
-            `;
-        }
-
         function calculateSavings() {
             const humanAgents = parseInt(document.getElementById('humanAgents').value) || 0;
             const aiReplacementPercent = parseInt(document.getElementById('aiReplacement').value) || 0;
@@ -730,63 +617,52 @@
             const humanAgentCostPerMonth = 2400;
             const humanInteractionsPerHour = 13;
             const hoursPerMonth = 160;
-            const humanInteractionsPerAgentPerMonth = humanInteractionsPerHour * hoursPerMonth;
+            const humanInteractionsPerAgentPerMonth = humanInteractionsPerHour * hoursPerMonth; // 2080
             
+            // Calculate total interactions based on current agent count
             const totalMonthlyInteractions = humanAgents * humanInteractionsPerAgentPerMonth;
+            
+            const currentHumanCost = humanAgents * humanAgentCostPerMonth;
+            
+            // If no AI replacement, keep everything as is
+            if (aiReplacementPercent === 0) {
+                document.getElementById('humanAgentCount').textContent = humanAgents;
+                document.getElementById('humanCost').textContent = `£${currentHumanCost.toLocaleString()}`;
+                document.getElementById('remainingAgents').textContent = humanAgents;
+                document.getElementById('aiUnitCostText').textContent = 'No AI automation';
+                document.getElementById('totalNewCost').textContent = `£${currentHumanCost.toLocaleString()}`;
+                document.getElementById('monthlySavings').textContent = '£0';
+                document.getElementById('annualSavings').textContent = '0';
+                return;
+            }
+            
             const aiHandledInteractions = Math.round(totalMonthlyInteractions * (aiReplacementPercent / 100));
             const humanHandledInteractions = totalMonthlyInteractions - aiHandledInteractions;
             
-            const breakEvenPoint = calculateBreakEvenPoint(humanAgents);
-            const resultsSection = document.getElementById('resultsSection');
-            const breakEvenIndicator = document.getElementById('breakEvenIndicator');
-
-            // Update break-even indicator
-            if (aiReplacementPercent < breakEvenPoint) {
-                breakEvenIndicator.className = 'break-even-indicator';
-                breakEvenIndicator.innerHTML = `<strong>Break-even point:</strong> You need ${breakEvenPoint}% automation to start seeing cost savings with your current team size.`;
+            // Calculate AI cost using tiered pricing
+            const aiCostResult = calculateAICost(aiHandledInteractions);
+            const aiCost = aiCostResult.cost;
+            
+            // Calculate required human agents for remaining work
+            const requiredHumanAgents = Math.ceil(humanHandledInteractions / humanInteractionsPerAgentPerMonth);
+            const remainingHumanCost = requiredHumanAgents * humanAgentCostPerMonth;
+            
+            const totalNewCost = aiCost + remainingHumanCost;
+            const monthlySavings = currentHumanCost - totalNewCost;
+            const annualSavings = monthlySavings * 12;
+            
+            // Update display
+            document.getElementById('humanAgentCount').textContent = humanAgents;
+            document.getElementById('humanCost').textContent = `£${currentHumanCost.toLocaleString()}`;
+            document.getElementById('remainingAgents').textContent = requiredHumanAgents;
+            document.getElementById('totalNewCost').textContent = `£${totalNewCost.toLocaleString()}`;
+            document.getElementById('monthlySavings').textContent = `£${monthlySavings.toLocaleString()}`;
+            document.getElementById('annualSavings').textContent = `${annualSavings.toLocaleString()}`;
+            
+            if (aiHandledInteractions > 0) {
+                document.getElementById('aiUnitCostText').textContent = `£${aiCostResult.unitCost.toFixed(2)} per AI interaction`;
             } else {
-                breakEvenIndicator.className = 'break-even-indicator positive';
-                breakEvenIndicator.innerHTML = `<strong>✓ Cost savings achieved!</strong> You've exceeded the ${breakEvenPoint}% break-even threshold.`;
-            }
-
-            // Render appropriate results based on automation level
-            if (aiReplacementPercent === 0) {
-                resultsSection.innerHTML = `
-                    <h2 class="section-title">Current State</h2>
-                    <p style="font-size: 1em; color: #718096; line-height: 1.6; margin-top: 10px;">
-                        Adjust the automation percentage above to see potential impact on your operation costs and efficiency.
-                    </p>
-                `;
-            } else if (aiReplacementPercent < breakEvenPoint) {
-                resultsSection.innerHTML = `
-                    <h2 class="section-title">Pilot Phase Metrics</h2>
-                    <p style="font-size: 1em; color: #718096; line-height: 1.6; margin-top: 10px; margin-bottom: 20px;">
-                        At <strong>${aiReplacementPercent}%</strong> automation, you'll handle <strong>${aiHandledInteractions.toLocaleString()}</strong> interactions monthly through AI while building your automation capability. This phase prepares your system for scale - increase to <strong>${calculateBreakEvenPoint(humanAgents)}%+</strong> automation to begin seeing cost reductions.
-                    </p>
-                    ${renderPilotPhaseCards(humanAgents, aiHandledInteractions)}
-                `;
-            } else {
-                // Calculate full savings scenario
-                const currentHumanCost = humanAgents * humanAgentCostPerMonth;
-                const aiCostResult = calculateAICost(aiHandledInteractions);
-                const aiCost = aiCostResult.cost;
-                const requiredHumanAgents = Math.ceil(humanHandledInteractions / humanInteractionsPerAgentPerMonth);
-                const remainingHumanCost = requiredHumanAgents * humanAgentCostPerMonth;
-                const totalNewCost = aiCost + remainingHumanCost;
-                const monthlySavings = currentHumanCost - totalNewCost;
-                const annualSavings = monthlySavings * 12;
-
-                const calculations = {
-                    currentHumanCost,
-                    requiredHumanAgents,
-                    aiCost,
-                    aiCostResult,
-                    totalNewCost,
-                    monthlySavings,
-                    annualSavings
-                };
-
-                resultsSection.innerHTML = renderSavingsPhase(humanAgents, aiReplacementPercent, calculations);
+                document.getElementById('aiUnitCostText').textContent = 'No AI automation';
             }
         }
         
