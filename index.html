@@ -119,15 +119,26 @@
 
         .slider-container {
             margin-top: 10px;
+            position: relative;
         }
 
         .slider-value {
             text-align: center;
-            font-size: 1.8em;
+            font-size: 0.9em;
             font-weight: 700;
             color: #9746B7;
             margin-bottom: 12px;
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .slider-value #agentSliderValue,
+        .slider-value #sliderValue {
+            font-size: 1.3em;
         }
 
         input[type="range"] {
@@ -207,42 +218,67 @@
             margin-top: 15px;
         }
 
-        .savings-highlight {
-            background: #3CAF88;
-            color: white;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(60, 175, 136, 0.2);
+        .savings-summary {
+            margin-top: 15px;
+            padding: 0;
+            background: none;
+            border: none;
         }
 
-        .savings-highlight h3 {
+        .savings-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .savings-line.annual {
+            border-bottom: none;
+            font-weight: 600;
+        }
+
+        .annual-note {
+            font-size: 0.9em;
+            color: #718096;
+            margin-left: 10px;
+            font-weight: 400;
+        }
+
+        .savings-label {
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
-            font-size: 1.3em;
-            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #333953;
+            font-weight: 500;
         }
 
-        .savings-highlight .value {
-            font-size: 2.5em;
+        .savings-value {
+            font-family: 'Museo Slab', Rockwell, Georgia, serif;
+            font-size: 1.4em;
             font-weight: 700;
-            font-family: 'Museo Slab', Rockwell, Georgia, serif;
+            color: #3CAF88;
+        }
+
+        .annual .savings-value {
+            font-size: 1.6em;
         }
 
         .info-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 22px;
-            height: 22px;
+            width: 16px;
+            height: 16px;
             background: #D1D3DA;
             color: #333953;
             border-radius: 50%;
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 600;
             cursor: pointer;
-            margin-left: 10px;
+            margin-left: 8px;
             position: relative;
             transition: all 0.2s ease;
+            text-transform: none;
         }
 
         .info-button:hover {
@@ -251,7 +287,83 @@
             transform: scale(1.1);
         }
 
-        .info-popup {
+        /* Slider info popup styles - positioned relative to slider container */
+        .slider-container .info-popup {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #D1D3DA;
+            border-radius: 8px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 6px 25px rgba(51, 57, 83, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .slider-container .info-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slider-container .info-popup h4 {
+            font-family: 'Museo Slab', Rockwell, Georgia, serif;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            color: #333953;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .slider-container .info-popup ul {
+            font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.8em;
+            color: #718096;
+            padding-left: 20px;
+            line-height: 1.5;
+            font-weight: 400;
+            text-align: left;
+        }
+
+        .slider-container .info-popup li {
+            margin-bottom: 6px;
+            font-weight: 400;
+            text-align: left;
+        }
+
+        /* Arrow pointing up to the info button */
+        .slider-container .info-popup::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid #D1D3DA;
+        }
+
+        .slider-container .info-popup::after {
+            content: '';
+            position: absolute;
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid white;
+        }
+
+        /* Section title info popup styles - keep original positioning */
+        .section-title .info-popup {
             position: absolute;
             top: 30px;
             left: -100px;
@@ -267,12 +379,12 @@
             z-index: 10;
         }
 
-        .info-popup.show {
+        .section-title .info-popup.show {
             opacity: 1;
             visibility: visible;
         }
 
-        .info-popup h4 {
+        .section-title .info-popup h4 {
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
             font-size: 0.9em;
             margin-bottom: 10px;
@@ -280,7 +392,7 @@
             font-weight: 600;
         }
 
-        .info-popup ul {
+        .section-title .info-popup ul {
             font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 0.75em;
             color: #718096;
@@ -289,12 +401,12 @@
             font-weight: 400;
         }
 
-        .info-popup li {
+        .section-title .info-popup li {
             margin-bottom: 5px;
             font-weight: 400;
         }
 
-        .info-popup::before {
+        .section-title .info-popup::before {
             content: '';
             position: absolute;
             top: -8px;
@@ -306,7 +418,7 @@
             border-bottom: 8px solid #D1D3DA;
         }
 
-        .info-popup::after {
+        .section-title .info-popup::after {
             content: '';
             position: absolute;
             top: -7px;
@@ -338,6 +450,29 @@
             .results-grid {
                 grid-template-columns: 1fr;
             }
+
+            /* Adjust popup positioning for mobile */
+            .slider-container .info-popup {
+                width: 250px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .section-title .info-popup {
+                left: -50px;
+                width: 250px;
+            }
+        }
+
+        .assumption-text {
+            font-size: 0.85em;
+            color: #718096;
+            font-style: italic;
+            margin-top: 15px;
+            padding: 12px;
+            background: #F8F5FA;
+            border-radius: 6px;
+            border-left: 3px solid #9746B7;
         }
     </style>
 </head>
@@ -353,20 +488,39 @@
                 <h2 class="section-title">Your Current Operation</h2>
                 
                 <div class="input-group">
-                    <label for="humanAgents">Number of Human Agents</label>
-                    <input type="number" id="humanAgents" value="5" min="1">
-                </div>
-                
-                <div class="input-group">
-                    <label for="monthlyInteractions">Monthly Customer Interactions</label>
-                    <input type="number" id="monthlyInteractions" value="9600" min="1">
-                </div>
-                
-                <div class="input-group">
-                    <label for="aiReplacement">Percentage Suitable for AI</label>
                     <div class="slider-container">
-                        <div class="slider-value"><span id="sliderValue">60</span>%</div>
-                        <input type="range" id="aiReplacement" value="60" min="0" max="100" step="20">
+                        <div class="slider-value">
+                            <span id="agentSliderValue">5</span> Human Agents
+                            <span class="info-button" onclick="toggleInfo(this)">i</span>
+                            <div class="info-popup">
+                                <h4>Number of Human Agents</h4>
+                                <ul>
+                                    <li>Current full-time equivalent agents in your team</li>
+                                    <li>Includes all customer-facing support staff</li>
+                                    <li>Used to calculate baseline costs and capacity</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="range" id="humanAgents" value="5" min="1" max="40" step="1">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="slider-container">
+                        <div class="slider-value">
+                            <span id="sliderValue">60</span>% Automated
+                            <span class="info-button" onclick="toggleInfo(this)">i</span>
+                            <div class="info-popup">
+                                <h4>Percentage Suitable for AI Automation</h4>
+                                <ul>
+                                    <li>Typical range: 40-80% of customer interactions</li>
+                                    <li>Includes routine queries, FAQs, order tracking</li>
+                                    <li>Complex issues still require human agents</li>
+                                    <li>Conservative estimates recommended initially</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="range" id="aiReplacement" value="60" min="0" max="100" step="10">
                     </div>
                 </div>
             </div>
@@ -380,7 +534,7 @@
                             <li>Human agents: £2,400/month (all costs included)</li>
                             <li>Productivity: 13 interactions/hour, 160 hours/month</li>
                             <li>AI pricing includes volume discounts</li>
-                            <li>Complex issues still require human agents</li>
+                            <li>AI handles routine queries; complex issues remain with humans</li>
                         </ul>
                     </div>
                 </h2>
@@ -396,15 +550,17 @@
                     <div class="result-card">
                         <h3>New Costs</h3>
                         <div class="main-line"><span id="remainingAgents">2</span> human agents</div>
-                        <div class="main-line"><span id="aiUnitCostText">£0.35 per AI interaction</span></div>
+                        <div class="main-line"><span id="aiUnitCostText">+ AI automation</span></div>
                         <div class="value" id="totalNewCost">£7,104</div>
                     </div>
                 </div>
                 
-                <div class="savings-highlight">
-                    <h3>Monthly Savings</h3>
-                    <div class="value" id="monthlySavings">£4,896</div>
-                    <p style="margin-top: 8px; opacity: 0.9;">Annual Savings: <span id="annualSavings">£58,752</span></p>
+                <div class="savings-summary">
+                    <div class="savings-line">
+                        <span class="savings-label">Monthly Savings:</span>
+                        <span class="savings-value" id="monthlySavings">£4,896</span>
+                        <span class="annual-note">(£<span id="annualSavings">58,752</span> annually)</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -455,22 +611,38 @@
 
         function calculateSavings() {
             const humanAgents = parseInt(document.getElementById('humanAgents').value) || 0;
-            const monthlyInteractions = parseInt(document.getElementById('monthlyInteractions').value) || 0;
             const aiReplacementPercent = parseInt(document.getElementById('aiReplacement').value) || 0;
             
             const humanAgentCostPerMonth = 2400;
             const humanInteractionsPerHour = 13;
             const hoursPerMonth = 160;
+            const humanInteractionsPerAgentPerMonth = humanInteractionsPerHour * hoursPerMonth; // 2080
+            
+            // Calculate total interactions based on current agent count
+            const totalMonthlyInteractions = humanAgents * humanInteractionsPerAgentPerMonth;
             
             const currentHumanCost = humanAgents * humanAgentCostPerMonth;
-            const humanInteractionsPerAgentPerMonth = humanInteractionsPerHour * hoursPerMonth;
             
-            const aiHandledInteractions = Math.round(monthlyInteractions * (aiReplacementPercent / 100));
-            const humanHandledInteractions = monthlyInteractions - aiHandledInteractions;
+            // If no AI replacement, keep everything as is
+            if (aiReplacementPercent === 0) {
+                document.getElementById('humanAgentCount').textContent = humanAgents;
+                document.getElementById('humanCost').textContent = `£${currentHumanCost.toLocaleString()}`;
+                document.getElementById('remainingAgents').textContent = humanAgents;
+                document.getElementById('aiUnitCostText').textContent = 'No AI automation';
+                document.getElementById('totalNewCost').textContent = `£${currentHumanCost.toLocaleString()}`;
+                document.getElementById('monthlySavings').textContent = '£0';
+                document.getElementById('annualSavings').textContent = '0';
+                return;
+            }
             
+            const aiHandledInteractions = Math.round(totalMonthlyInteractions * (aiReplacementPercent / 100));
+            const humanHandledInteractions = totalMonthlyInteractions - aiHandledInteractions;
+            
+            // Calculate AI cost using tiered pricing
             const aiCostResult = calculateAICost(aiHandledInteractions);
             const aiCost = aiCostResult.cost;
             
+            // Calculate required human agents for remaining work
             const requiredHumanAgents = Math.ceil(humanHandledInteractions / humanInteractionsPerAgentPerMonth);
             const remainingHumanCost = requiredHumanAgents * humanAgentCostPerMonth;
             
@@ -478,17 +650,18 @@
             const monthlySavings = currentHumanCost - totalNewCost;
             const annualSavings = monthlySavings * 12;
             
+            // Update display
             document.getElementById('humanAgentCount').textContent = humanAgents;
             document.getElementById('humanCost').textContent = `£${currentHumanCost.toLocaleString()}`;
             document.getElementById('remainingAgents').textContent = requiredHumanAgents;
             document.getElementById('totalNewCost').textContent = `£${totalNewCost.toLocaleString()}`;
             document.getElementById('monthlySavings').textContent = `£${monthlySavings.toLocaleString()}`;
-            document.getElementById('annualSavings').textContent = `£${annualSavings.toLocaleString()}`;
+            document.getElementById('annualSavings').textContent = `${annualSavings.toLocaleString()}`;
             
             if (aiHandledInteractions > 0) {
                 document.getElementById('aiUnitCostText').textContent = `£${aiCostResult.unitCost.toFixed(2)} per AI interaction`;
             } else {
-                document.getElementById('aiUnitCostText').textContent = 'No AI interactions';
+                document.getElementById('aiUnitCostText').textContent = 'No AI automation';
             }
         }
         
@@ -507,14 +680,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             const slider = document.getElementById('aiReplacement');
             const sliderValue = document.getElementById('sliderValue');
+            const agentSlider = document.getElementById('humanAgents');
+            const agentSliderValue = document.getElementById('agentSliderValue');
             
             slider.addEventListener('input', function() {
                 sliderValue.textContent = this.value;
                 calculateSavings();
             });
             
-            document.getElementById('humanAgents').addEventListener('input', calculateSavings);
-            document.getElementById('monthlyInteractions').addEventListener('input', calculateSavings);
+            agentSlider.addEventListener('input', function() {
+                agentSliderValue.textContent = this.value;
+                calculateSavings();
+            });
             
             calculateSavings();
         });
