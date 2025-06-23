@@ -13,21 +13,20 @@
 
         body {
             font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
-            background: transparent;
-            padding: 0;
-            margin: 0;
+            background: #F8F5FA;
+            min-height: 100vh;
+            padding: 20px;
             color: #333953;
-            overflow-x: hidden;
         }
 
         .calculator-container {
             width: 100%;
-            max-width: none;
+            max-width: 1200px;
             background: white;
             border-radius: 20px;
-            box-shadow: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            margin: 0;
+            margin: 0 auto;
         }
 
         .header {
@@ -92,31 +91,6 @@
             margin-bottom: 25px;
         }
 
-        .input-group label {
-            display: block;
-            font-weight: 500;
-            color: #333953;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .input-group input[type="number"] {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #D1D3DA;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background: white;
-            color: #333953;
-        }
-
-        .input-group input[type="number"]:focus {
-            outline: none;
-            border-color: #9746B7;
-            box-shadow: 0 0 0 3px rgba(151, 70, 183, 0.1);
-        }
-
         .slider-container {
             margin-top: 10px;
             position: relative;
@@ -124,21 +98,25 @@
 
         .slider-value {
             text-align: center;
-            font-size: 0.9em;
-            font-weight: 700;
-            color: #9746B7;
+            font-size: 0.85em;
+            font-weight: 400;
+            color: #718096;
             margin-bottom: 12px;
-            font-family: 'Museo Slab', Rockwell, Georgia, serif;
+            font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
             position: relative;
             display: inline-block;
             width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0;
         }
 
         .slider-value #agentSliderValue,
-        .slider-value #sliderValue {
-            font-size: 1.3em;
+        .slider-value #sliderValue,
+        .slider-value #costSliderValue,
+        .slider-value #monthlyInteractionsValue {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #9746B7;
+            font-family: 'Museo Slab', Rockwell, Georgia, serif;
         }
 
         input[type="range"] {
@@ -179,9 +157,73 @@
             box-shadow: 0 2px 8px rgba(151, 70, 183, 0.3);
         }
 
+        .advanced-section {
+            margin-top: 20px;
+            border-top: 1px solid #D1D3DA;
+            padding-top: 15px;
+        }
+
+        .advanced-toggle {
+            background: none;
+            border: none;
+            font-family: 'Museo Slab', Rockwell, Georgia, serif;
+            font-size: 1em;
+            color: #9746B7;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .advanced-toggle:hover {
+            color: #7A3A95;
+        }
+
+        .advanced-toggle .arrow {
+            margin-left: 8px;
+            transition: transform 0.2s ease;
+            font-size: 0.8em;
+        }
+
+        .advanced-toggle.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        .advanced-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .advanced-content.expanded {
+            max-height: 300px;
+        }
+
+        .break-even-indicator {
+            background: #FFF3CD;
+            border: 1px solid #FFE4A3;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #856404;
+        }
+
+        .break-even-indicator.positive {
+            background: rgba(60, 175, 136, 0.1);
+            border-color: rgba(60, 175, 136, 0.3);
+            color: #2A6B56;
+        }
+
+        .break-even-indicator strong {
+            font-weight: 600;
+        }
+
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 25px;
         }
@@ -233,18 +275,6 @@
             border-bottom: 1px solid #F0F0F0;
         }
 
-        .savings-line.annual {
-            border-bottom: none;
-            font-weight: 600;
-        }
-
-        .annual-note {
-            font-size: 0.9em;
-            color: #718096;
-            margin-left: 10px;
-            font-weight: 400;
-        }
-
         .savings-label {
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
             font-size: 1.1em;
@@ -259,8 +289,11 @@
             color: #3CAF88;
         }
 
-        .annual .savings-value {
-            font-size: 1.6em;
+        .annual-note {
+            font-size: 0.9em;
+            color: #718096;
+            margin-left: 10px;
+            font-weight: 400;
         }
 
         .info-button {
@@ -287,8 +320,7 @@
             transform: scale(1.1);
         }
 
-        /* Slider info popup styles - positioned relative to slider container */
-        .slider-container .info-popup {
+        .info-popup {
             position: absolute;
             top: 35px;
             left: 50%;
@@ -305,67 +337,36 @@
             z-index: 100;
         }
 
-        .slider-container .info-popup.show {
+        .info-popup.show {
             opacity: 1;
             visibility: visible;
         }
 
-        .slider-container .info-popup h4 {
+        .info-popup h4 {
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
             font-size: 0.9em;
             margin-bottom: 10px;
             color: #333953;
             font-weight: 600;
             text-align: left;
-            text-transform: none;
         }
 
-        .slider-container .info-popup ul {
+        .info-popup ul {
             font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 0.75em;
+            font-size: 0.8em;
             color: #718096;
             padding-left: 20px;
             line-height: 1.5;
             font-weight: 400;
             text-align: left;
-            text-transform: none;
         }
 
-        .slider-container .info-popup li {
+        .info-popup li {
             margin-bottom: 6px;
             font-weight: 400;
             text-align: left;
-            text-transform: none;
         }
 
-        /* Arrow pointing up to the info button */
-        .slider-container .info-popup::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 8px solid #D1D3DA;
-        }
-
-        .slider-container .info-popup::after {
-            content: '';
-            position: absolute;
-            top: -7px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 8px solid white;
-        }
-
-        /* Section title info popup styles - keep original positioning */
         .section-title .info-popup {
             position: absolute;
             top: 30px;
@@ -389,7 +390,7 @@
 
         .section-title .info-popup h4 {
             font-family: 'Museo Slab', Rockwell, Georgia, serif;
-            font-size: 0.75em;
+            font-size: 0.9em;
             margin-bottom: 10px;
             color: #333953;
             font-weight: 600;
@@ -397,7 +398,7 @@
 
         .section-title .info-popup ul {
             font-family: 'Museo Sans', Verdana, -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 0.6em;
+            font-size: 0.75em;
             color: #718096;
             padding-left: 20px;
             line-height: 1.5;
@@ -433,7 +434,6 @@
             border-bottom: 8px solid white;
         }
 
-        /* Mobile styles */
         @media (max-width: 600px) {
             .calculator-body {
                 flex-direction: column;
@@ -449,33 +449,6 @@
             .results-section {
                 padding: 30px 25px;
             }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
-            /* Adjust popup positioning for mobile */
-            .slider-container .info-popup {
-                width: 250px;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-
-            .section-title .info-popup {
-                left: -50px;
-                width: 250px;
-            }
-        }
-
-        .assumption-text {
-            font-size: 0.85em;
-            color: #718096;
-            font-style: italic;
-            margin-top: 15px;
-            padding: 12px;
-            background: #F8F5FA;
-            border-radius: 6px;
-            border-left: 3px solid #9746B7;
         }
     </style>
 </head>
@@ -499,8 +472,8 @@
                                 <h4>Number of Human Agents</h4>
                                 <ul>
                                     <li>Current full-time equivalent agents in your team</li>
-                                    <li>Include all customer-facing support staff</li>
-                                    <li>Used to estimate baseline costs and capacity</li>
+                                    <li>Includes all customer-facing support staff</li>
+                                    <li>Used to calculate baseline costs and capacity</li>
                                 </ul>
                             </div>
                         </div>
@@ -517,58 +490,57 @@
                                 <h4>Percentage Suitable for AI Automation</h4>
                                 <ul>
                                     <li>Typical range: 40-80% of customer interactions</li>
-                                    <li>Consider query types that are ready for automation, and their relative contact volumes</li>
+                                    <li>Includes routine queries, FAQs, order tracking</li>
+                                    <li>Complex issues still require human agents</li>
+                                    <li>Conservative estimates recommended initially</li>
                                 </ul>
                             </div>
                         </div>
                         <input type="range" id="aiReplacement" value="60" min="0" max="100" step="10">
                     </div>
                 </div>
+
+                <div class="advanced-section">
+                    <button class="advanced-toggle" onclick="toggleAdvanced()">
+                        Advanced Settings
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="advanced-content" id="advancedContent">
+                        <div class="input-group">
+                            <div class="slider-container">
+                                <div class="slider-value">
+                                    £<span id="costSliderValue">2,400</span> per agent/month
+                                </div>
+                                <input type="range" id="agentCost" value="2400" min="1500" max="4000" step="100">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="slider-container">
+                                <div class="slider-value">
+                                    <span id="monthlyInteractionsValue">10,400</span> monthly interactions
+                                </div>
+                                <input type="range" id="monthlyInteractions" value="10400" min="1000" max="50000" step="500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="breakEvenIndicator" class="break-even-indicator">
+                    <strong>Break-even point:</strong> You need 20% automation to start seeing cost savings with your current team size.
+                </div>
             </div>
 
-            <div class="results-section">
-                <h2 class="section-title">Cost Comparison
-                    <span class="info-button" onclick="toggleInfo(this)">i</span>
-                    <div class="info-popup">
-                        <h4>Calculation Details</h4>
-                        <ul>
-                            <li>Human agents: £2,400/month (all costs included)</li>
-                            <li>Productivity: 13 interactions/hour, 160 hours/month</li>
-                            <li>AI pricing includes volume discounts</li>
-                            <li>AI handles routine queries; complex issues remain with humans</li>
-                        </ul>
-                    </div>
-                </h2>
-                
-                <div class="results-grid">
-                    <div class="result-card">
-                        <h3>Current Costs</h3>
-                        <div class="main-line"><span id="humanAgentCount">5</span> human agents</div>
-                        <div class="main-line">£2,400/month each</div>
-                        <div class="value" id="humanCost">£12,000</div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3>New Costs</h3>
-                        <div class="main-line"><span id="remainingAgents">2</span> human agents</div>
-                        <div class="main-line"><span id="aiUnitCostText">+ AI automation</span></div>
-                        <div class="value" id="totalNewCost">£7,104</div>
-                    </div>
-                </div>
-                
-                <div class="savings-summary">
-                    <div class="savings-line">
-                        <span class="savings-label">Monthly Savings:</span>
-                        <span class="savings-value" id="monthlySavings">£4,896</span>
-                        <span class="annual-note">(£<span id="annualSavings">58,752</span> annually)</span>
-                    </div>
-                </div>
+            <div class="results-section" id="resultsSection">
+                <!-- Content will be dynamically populated -->
             </div>
         </div>
     </div>
 
     <script>
-        // AI pricing tiers with volume discounts
+        // Track whether user has manually adjusted advanced settings
+        let userHasAdjustedInteractions = false;
+        
         const aiPricingTiers = [
             { volume: 500, price: 200, unitCost: 0.40 },
             { volume: 1000, price: 389, unitCost: 0.39 },
@@ -597,7 +569,7 @@
             if (interactions > aiPricingTiers[aiPricingTiers.length - 1].volume) {
                 const highestTier = aiPricingTiers[aiPricingTiers.length - 1];
                 return {
-                    cost: Math.ceil(interactions * highestTier.unitCost),
+                    cost: Math.round(interactions * highestTier.unitCost),
                     unitCost: highestTier.unitCost,
                     tier: `${interactions.toLocaleString()} interactions at £${highestTier.unitCost}`
                 };
@@ -610,62 +582,176 @@
             };
         }
 
+        function getMonthlyInteractions(humanAgents) {
+            if (userHasAdjustedInteractions) {
+                return parseInt(document.getElementById('monthlyInteractions').value) || 0;
+            } else {
+                // Dynamic calculation: 13 interactions per hour, 160 hours per month
+                const defaultInteractionsPerHour = 13;
+                const hoursPerMonth = 160;
+                const calculatedInteractions = humanAgents * defaultInteractionsPerHour * hoursPerMonth;
+                
+                // Update the slider and display to reflect calculated value
+                document.getElementById('monthlyInteractions').value = calculatedInteractions;
+                document.getElementById('monthlyInteractionsValue').textContent = calculatedInteractions.toLocaleString();
+                
+                return calculatedInteractions;
+            }
+        }
+
+        function calculateBreakEvenPoint(humanAgents, agentCost, monthlyInteractions) {
+            if (humanAgents === 0 || monthlyInteractions === 0) return 100;
+            
+            const humanInteractionsPerAgentPerMonth = monthlyInteractions / humanAgents;
+            
+            // Find the minimum automation percentage needed to reduce by one agent
+            const exactBreakEvenPercent = (humanInteractionsPerAgentPerMonth / monthlyInteractions) * 100;
+            
+            // Round up to nearest 10% since slider only moves in 10% increments
+            const breakEvenPercent = Math.ceil(exactBreakEvenPercent / 10) * 10;
+            
+            return Math.min(breakEvenPercent, 100);
+        }
+
+        function renderPilotPhaseCards(humanAgents, agentCost, aiHandledInteractions) {
+            const aiCost = calculateAICost(aiHandledInteractions).cost;
+            return `
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Current Costs</h3>
+                        <div class="main-line">${humanAgents} human agents</div>
+                        <div class="main-line">£${agentCost.toLocaleString()}/month each</div>
+                        <div class="value">£${(humanAgents * agentCost).toLocaleString()}</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Pilot Investment</h3>
+                        <div class="main-line">Same ${humanAgents} agents</div>
+                        <div class="main-line">+ £${aiCost.toLocaleString()} AI automation</div>
+                        <div class="value">+£${aiCost.toLocaleString()}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSavingsPhase(humanAgents, aiReplacementPercent, calculations) {
+            const { currentHumanCost, requiredHumanAgents, aiCost, totalNewCost, monthlySavings, annualSavings, agentCost, monthlyInteractions } = calculations;
+            
+            return `
+                <h2 class="section-title">Cost Savings Analysis
+                    <span class="info-button" onclick="toggleInfo(this)">i</span>
+                    <div class="info-popup">
+                        <h4>Calculation Details</h4>
+                        <ul>
+                            <li>Human agents: £${agentCost.toLocaleString()}/month (all costs included)</li>
+                            <li>Total interactions: ${monthlyInteractions.toLocaleString()}/month</li>
+                            <li>AI pricing includes volume discounts</li>
+                            <li>AI handles routine queries; complex issues remain with humans</li>
+                        </ul>
+                    </div>
+                </h2>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Current Costs</h3>
+                        <div class="main-line">${humanAgents} human agents</div>
+                        <div class="main-line">£${agentCost.toLocaleString()}/month each</div>
+                        <div class="value">£${currentHumanCost.toLocaleString()}</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>New Costs</h3>
+                        <div class="main-line">${requiredHumanAgents} human agents</div>
+                        <div class="main-line">+ £${aiCost.toLocaleString()} AI automation</div>
+                        <div class="value">£${totalNewCost.toLocaleString()}</div>
+                    </div>
+                </div>
+                
+                <div class="savings-summary">
+                    <div class="savings-line">
+                        <span class="savings-label">Monthly Savings:</span>
+                        <span class="savings-value">£${monthlySavings.toLocaleString()}</span>
+                        <span class="annual-note">(£${annualSavings.toLocaleString()} annual savings)</span>
+                    </div>
+                </div>
+            `;
+        }
+
         function calculateSavings() {
             const humanAgents = parseInt(document.getElementById('humanAgents').value) || 0;
+            const monthlyInteractions = getMonthlyInteractions(humanAgents);
             const aiReplacementPercent = parseInt(document.getElementById('aiReplacement').value) || 0;
+            const agentCost = parseInt(document.getElementById('agentCost').value) || 2400;
             
-            const humanAgentCostPerMonth = 2400;
-            const humanInteractionsPerHour = 13;
-            const hoursPerMonth = 160;
-            const humanInteractionsPerAgentPerMonth = humanInteractionsPerHour * hoursPerMonth; // 2080
+            const aiHandledInteractions = Math.round(monthlyInteractions * (aiReplacementPercent / 100));
+            const humanHandledInteractions = monthlyInteractions - aiHandledInteractions;
             
-            // Calculate total interactions based on current agent count
-            const totalMonthlyInteractions = humanAgents * humanInteractionsPerAgentPerMonth;
+            // Calculate interactions per agent for break-even calculations
+            const humanInteractionsPerAgentPerMonth = monthlyInteractions / humanAgents;
             
-            const currentHumanCost = humanAgents * humanAgentCostPerMonth;
-            
-            // If no AI replacement, keep everything as is
-            if (aiReplacementPercent === 0) {
-                document.getElementById('humanAgentCount').textContent = humanAgents;
-                document.getElementById('humanCost').textContent = `£${currentHumanCost.toLocaleString()}`;
-                document.getElementById('remainingAgents').textContent = humanAgents;
-                document.getElementById('aiUnitCostText').textContent = 'No AI automation';
-                document.getElementById('totalNewCost').textContent = `£${currentHumanCost.toLocaleString()}`;
-                document.getElementById('monthlySavings').textContent = '£0';
-                document.getElementById('annualSavings').textContent = '0';
-                return;
-            }
-            
-            const aiHandledInteractions = Math.round(totalMonthlyInteractions * (aiReplacementPercent / 100));
-            const humanHandledInteractions = totalMonthlyInteractions - aiHandledInteractions;
-            
-            // Calculate AI cost using tiered pricing
-            const aiCostResult = calculateAICost(aiHandledInteractions);
-            const aiCost = aiCostResult.cost;
-            
-            // Calculate required human agents for remaining work
-            const requiredHumanAgents = Math.ceil(humanHandledInteractions / humanInteractionsPerAgentPerMonth);
-            const remainingHumanCost = requiredHumanAgents * humanAgentCostPerMonth;
-            
-            const totalNewCost = aiCost + remainingHumanCost;
-            const monthlySavings = currentHumanCost - totalNewCost;
-            const annualSavings = monthlySavings * 12;
-            
-            // Update display
-            document.getElementById('humanAgentCount').textContent = humanAgents;
-            document.getElementById('humanCost').textContent = `£${currentHumanCost.toLocaleString()}`;
-            document.getElementById('remainingAgents').textContent = requiredHumanAgents;
-            document.getElementById('totalNewCost').textContent = `£${totalNewCost.toLocaleString()}`;
-            document.getElementById('monthlySavings').textContent = `£${monthlySavings.toLocaleString()}`;
-            document.getElementById('annualSavings').textContent = `${annualSavings.toLocaleString()}`;
-            
-            if (aiHandledInteractions > 0) {
-                document.getElementById('aiUnitCostText').textContent = `£${aiCostResult.unitCost.toFixed(2)} per AI interaction`;
+            const breakEvenPoint = calculateBreakEvenPoint(humanAgents, agentCost, monthlyInteractions);
+            const resultsSection = document.getElementById('resultsSection');
+            const breakEvenIndicator = document.getElementById('breakEvenIndicator');
+
+            // Update break-even indicator
+            if (aiReplacementPercent < breakEvenPoint) {
+                breakEvenIndicator.className = 'break-even-indicator';
+                breakEvenIndicator.innerHTML = `<strong>Break-even point:</strong> You need ${breakEvenPoint}% automation to start seeing cost savings with your current team size.`;
             } else {
-                document.getElementById('aiUnitCostText').textContent = 'No AI automation';
+                breakEvenIndicator.className = 'break-even-indicator positive';
+                breakEvenIndicator.innerHTML = `<strong>✓ Cost savings achieved!</strong> You've exceeded the ${breakEvenPoint}% break-even threshold.`;
+            }
+
+            // Render appropriate results based on automation level
+            if (aiReplacementPercent === 0) {
+                resultsSection.innerHTML = `
+                    <h2 class="section-title">Current State</h2>
+                    <p style="font-size: 1em; color: #718096; line-height: 1.6; margin-top: 10px;">
+                        Adjust the automation percentage above to see potential impact on your operation costs and efficiency.
+                    </p>
+                `;
+            } else if (aiReplacementPercent < breakEvenPoint) {
+                resultsSection.innerHTML = `
+                    <h2 class="section-title">Pilot Phase Metrics</h2>
+                    <p style="font-size: 1em; color: #718096; line-height: 1.6; margin-top: 10px; margin-bottom: 20px;">
+                        At <strong>${aiReplacementPercent}%</strong> automation, you'll handle <strong>${aiHandledInteractions.toLocaleString()}</strong> interactions monthly through AI while building your automation capability. This phase prepares your system for scale - increase to <strong>${breakEvenPoint}%+</strong> automation to begin seeing cost reductions.
+                    </p>
+                    ${renderPilotPhaseCards(humanAgents, agentCost, aiHandledInteractions)}
+                `;
+            } else {
+                // Calculate full savings scenario
+                const currentHumanCost = humanAgents * agentCost;
+                const aiCostResult = calculateAICost(aiHandledInteractions);
+                const aiCost = aiCostResult.cost;
+                const requiredHumanAgents = Math.ceil(humanHandledInteractions / humanInteractionsPerAgentPerMonth);
+                const remainingHumanCost = requiredHumanAgents * agentCost;
+                const totalNewCost = aiCost + remainingHumanCost;
+                const monthlySavings = Math.max(0, currentHumanCost - totalNewCost);
+                const annualSavings = monthlySavings * 12;
+
+                const calculations = {
+                    currentHumanCost,
+                    requiredHumanAgents,
+                    aiCost,
+                    totalNewCost,
+                    monthlySavings,
+                    annualSavings,
+                    agentCost,
+                    monthlyInteractions
+                };
+
+                resultsSection.innerHTML = renderSavingsPhase(humanAgents, aiReplacementPercent, calculations);
             }
         }
         
+        function toggleAdvanced() {
+            const content = document.getElementById('advancedContent');
+            const toggle = document.querySelector('.advanced-toggle');
+            
+            content.classList.toggle('expanded');
+            toggle.classList.toggle('expanded');
+        }
+
         function toggleInfo(button) {
             const popup = button.nextElementSibling;
             popup.classList.toggle('show');
@@ -683,6 +769,10 @@
             const sliderValue = document.getElementById('sliderValue');
             const agentSlider = document.getElementById('humanAgents');
             const agentSliderValue = document.getElementById('agentSliderValue');
+            const monthlyInteractionsSlider = document.getElementById('monthlyInteractions');
+            const monthlyInteractionsValue = document.getElementById('monthlyInteractionsValue');
+            const costSlider = document.getElementById('agentCost');
+            const costSliderValue = document.getElementById('costSliderValue');
             
             slider.addEventListener('input', function() {
                 sliderValue.textContent = this.value;
@@ -691,6 +781,17 @@
             
             agentSlider.addEventListener('input', function() {
                 agentSliderValue.textContent = this.value;
+                calculateSavings();
+            });
+            
+            monthlyInteractionsSlider.addEventListener('input', function() {
+                userHasAdjustedInteractions = true; // User has manually adjusted
+                monthlyInteractionsValue.textContent = parseInt(this.value).toLocaleString();
+                calculateSavings();
+            });
+            
+            costSlider.addEventListener('input', function() {
+                costSliderValue.textContent = parseInt(this.value).toLocaleString();
                 calculateSavings();
             });
             
